@@ -16,7 +16,7 @@ export class WeatherService {
     return this.httpClient.get<ICurrentWeatherData>(
       `http://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=${environment.appId}`
     ).pipe(
-      
+      map(data => this.transformToICurrentWeather(data))
     )
 
   }
@@ -25,7 +25,7 @@ export class WeatherService {
     return {
       city: data.name,
       country: data.sys.country,
-      date: new Date(data.dt),
+      date: new Date(data.dt * 1000),
       temperature: data.main.temp * 9/5 - 459.67,
       description: data.weather[0].description,
       image: `http://openweathermap.org/img/w/${data.weather[0].icon}.png`
